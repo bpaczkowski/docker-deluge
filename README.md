@@ -2,6 +2,8 @@
 [forumurl]: https://forum.linuxserver.io
 [ircurl]: https://www.linuxserver.io/irc/
 [podcasturl]: https://www.linuxserver.io/podcast/
+[appurl]: http://deluge-torrent.org/
+[hub]: https://hub.docker.com/r/linuxserver/deluge/
 
 [![linuxserver.io](https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/linuxserver_medium.png)][linuxserverurl]
 
@@ -12,7 +14,6 @@ The [LinuxServer.io][linuxserverurl] team brings you another container release f
 
 # linuxserver/deluge
 [![](https://images.microbadger.com/badges/version/linuxserver/deluge.svg)](https://microbadger.com/images/linuxserver/deluge "Get your own version badge on microbadger.com")[![](https://images.microbadger.com/badges/image/linuxserver/deluge.svg)](http://microbadger.com/images/linuxserver/deluge "Get your own image badge on microbadger.com")[![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/deluge.svg)][hub][![Docker Stars](https://img.shields.io/docker/stars/linuxserver/deluge.svg)][hub][![Build Status](http://jenkins.linuxserver.io:8080/buildStatus/icon?job=Dockers/LinuxServer.io/linuxserver-deluge)](http://jenkins.linuxserver.io:8080/job/Dockers/job/LinuxServer.io/job/linuxserver-deluge/)
-[hub]: https://hub.docker.com/r/linuxserver/deluge/
 
 [deluge](http://deluge-torrent.org/) Deluge is a lightweight, Free Software, cross-platform BitTorrent client.
 
@@ -21,8 +22,7 @@ The [LinuxServer.io][linuxserverurl] team brings you another container release f
 * Plugin System
 * Much more...
 
-[![deluge](https://avatars2.githubusercontent.com/u/6733935?v=3&s=200)][delugeurl]
-[delugeurl]: http://deluge-torrent.org/
+[![deluge](https://avatars2.githubusercontent.com/u/6733935?v=3&s=200)][appurl]
 
 ## Usage
 
@@ -32,6 +32,7 @@ docker create \
   --net=host \
   -e PUID=<UID> -e PGID=<GID> \
   -e TZ=<timezone> \
+  -e UMASK_SET=<022> \
   -v </path/to/your/downloads>:/downloads \
   -v </path/to/deluge/config>:/config \
   linuxserver/deluge
@@ -48,8 +49,9 @@ http://192.168.x.x:8080 would show you what's running INSIDE the container on po
 * `--net=host` - Shares host networking with container, **required**.
 * `-v /config` - deluge configs
 * `-v /downloads` - torrent download directory
-* `-e PGID` for for GroupID - see below for explanation
-* `-e PUID` for for UserID - see below for explanation
+* `-e PGID` for GroupID - see below for explanation
+* `-e PUID` for UserID - see below for explanation
+* `-e UMASK_SET` for umask setting of deluge, *optional* , default if left unset is 022. 
 * `-e TZ` for timezone information, eg Europe/London
 
 It is based on alpine linux with s6 overlay, for shell access whilst the container is running do `docker exec -it deluge /bin/bash`.
@@ -87,6 +89,9 @@ Change the downloads location in the webui in Preferences->Downloads and use /do
 
 ## Versions
 
++ **26.05.17:** Rebase to alpine 3.6.
++ **29.04.17:** Add variable for user defined umask.
++ **28.04.17:** update to libressl2.5-libssl.
 + **28.12.16:** Rebase to alpine 3.5 baseimage.
 + **17.11.16:** Rebase to edge baseimage.
 + **13.10.16:** Switch to libressl as openssl deprecated from alpine linux and deluge dependency
